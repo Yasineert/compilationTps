@@ -1,0 +1,81 @@
+public class compilation {
+
+    private String input;
+    private int position;
+
+    public compilation(String input) {
+        this.input = input;
+        this.position = 0;
+    }
+
+    public boolean parseS() {
+        if (position < input.length() && input.charAt(position) == 'b') {
+            position++;
+            if (parseS()) {
+                if (position < input.length() && input.charAt(position) == 'b') {
+                    position++;
+                    return true;
+                }
+            }
+            return false;
+        } else if (position < input.length() && input.charAt(position) == 'c') {
+            position++;
+            if (parseA()) {
+                if (position < input.length() && input.charAt(position) == 'c') {
+                    position++;
+                    return true;
+                }
+            }
+            return false;
+        }
+        return true;
+    }
+
+    public boolean parseA() {
+        if (position < input.length() && input.charAt(position) == 'b') {
+            position++;
+            if (parseA()) {
+                if (parseA()) {
+                    return true;
+                }
+            }
+            return false;
+        } else if (position < input.length() && input.charAt(position) == 'c') {
+            position++;
+            if (parseA()) {
+                if (parseS()) {
+                    if (position < input.length() && input.charAt(position) == 'b') {
+                        position++;
+                        return true;
+                    }
+                }
+            }
+            return false;
+        } else if (position < input.length() && input.charAt(position) == 'd') {
+            position++;
+            if (position < input.length() && input.charAt(position) == 'c') {
+                position++;
+                if (position < input.length() && input.charAt(position) == 'b') {
+                    position++;
+                    return true;
+                }
+            }
+            return false;
+        }
+        return false;
+    }
+
+    public static void main(String[] args) {
+        String[] testCases = {"cdcbc", "bcdcbcb", "cbdcbdcbc", "ccdcbcdcbcdcbbcr", "cdcbbb", "cdcb", ""};
+
+        for (String testCase : testCases) {
+            compilation parser = new compilation(testCase);
+            boolean isValid = parser.parseS();
+            if (isValid && parser.position == testCase.length()) {
+                System.out.println("La chaîne \"" + testCase + "\" est valide.");
+            } else {
+                System.out.println("La chaîne \"" + testCase + "\" n'est pas valide.");
+            }
+        }
+    }
+}
